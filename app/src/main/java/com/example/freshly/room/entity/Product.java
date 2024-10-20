@@ -6,7 +6,12 @@ import androidx.room.PrimaryKey;
 
 import com.example.freshly.room.schema.Schema;
 
-@Entity(tableName = Schema.PRODUCT)
+@Entity(
+        tableName = Schema.PRODUCT,
+        foreignKeys = {
+        @ForeignKey(entity = Vendor.class, parentColumns = "id", childColumns = "vendorID"),
+        @ForeignKey(entity = Category.class, parentColumns = "id", childColumns = "categoryID")
+})
 public class Product {
     @PrimaryKey(autoGenerate = true)
     public int id;
