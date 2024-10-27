@@ -14,7 +14,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:contentDescription="Freshly Logo"
-        android:src="@drawable/Freshly" />
+        android:src="@drawable/freshly_logo" />
 
 
     <TextView

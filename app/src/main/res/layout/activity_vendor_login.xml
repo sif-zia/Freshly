@@ -13,7 +13,7 @@
         android:id="@+id/logo"
         android:layout_width="240dp"
         android:layout_height="100dp"
-        android:src="@drawable/Freshly"
+        android:src="@drawable/freshly_logo"
         android:contentDescription="Freshly Logo"
         android:layout_gravity="center" />
 
