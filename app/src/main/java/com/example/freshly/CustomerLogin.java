@@ -1,6 +1,7 @@
 package com.example.freshly;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,17 +24,19 @@ public class CustomerLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_customer_login);
 
         TextView signUpText = findViewById(R.id.signup_text);
         Button loginButton = findViewById(R.id.customer_login_button);
+        Button switchButton = findViewById(R.id.switch_to_vendor_login);
 
         EditText email = findViewById(R.id.email);
         EditText password = findViewById(R.id.password);
 
         Intent intent = getIntent();
-        String ToastText = intent.getStringExtra(IntentKeys.LoginToast) ;
+        String ToastText = intent.getStringExtra(IntentKeys.CUSTOMER_LOGIN_TOAST) ;
         if ( ToastText != null) {
             Toast.makeText(CustomerLogin.this, ToastText, Toast.LENGTH_LONG).show();
         }
@@ -42,6 +45,7 @@ public class CustomerLogin extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent launchCustomerSignUp = new Intent(CustomerLogin.this, CustomerRegister.class);
+                launchCustomerSignUp.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(launchCustomerSignUp);
             }
         });
@@ -53,8 +57,15 @@ public class CustomerLogin extends AppCompatActivity {
                 String passwordText = password.getText().toString();
 
                 new loginTask().execute(new Customer(null, emailText, passwordText, null, null));
-                String TAG = "Freshly.CustomerLogin.onCreate";
-                Log.d(TAG, "Email: " + emailText + " Password: " + passwordText);
+            }
+        });
+
+        switchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent launchVendorLoginActivity = new Intent(CustomerLogin.this, VendorLogin.class);
+                launchVendorLoginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(launchVendorLoginActivity);
             }
         });
     }
@@ -70,7 +81,7 @@ public class CustomerLogin extends AppCompatActivity {
 
             loginButton.setEnabled(false);
             switchButton.setEnabled(false);
-            signUpText.setOnClickListener(null);
+            signUpText.setEnabled(false);
         }
 
         @Override
@@ -91,34 +102,28 @@ public class CustomerLogin extends AppCompatActivity {
         protected void onPostExecute(Integer loginSuccessful) {
             super.onPostExecute(loginSuccessful);
 
-            if(loginSuccessful < 0) {
-                Button loginButton = findViewById(R.id.customer_login_button);
-                Button switchButton = findViewById(R.id.switch_to_vendor_login);
-                TextView signUpText = findViewById(R.id.signup_text);
+            Button loginButton = findViewById(R.id.customer_login_button);
+            Button switchButton = findViewById(R.id.switch_to_vendor_login);
+            TextView signUpText = findViewById(R.id.signup_text);
 
-                loginButton.setEnabled(true);
-                switchButton.setEnabled(true);
-                signUpText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent launchCustomerLoginActivity = new Intent(CustomerLogin.this, CustomerRegister.class);
-                        startActivity(launchCustomerLoginActivity);
-                    }
-                });
+            loginButton.setEnabled(true);
+            switchButton.setEnabled(true);
+            signUpText.setEnabled(true);
+
+            if(loginSuccessful < 0) {
 
                 if(loginSuccessful == -1) {
                    Toast.makeText(CustomerLogin.this, "Invalid Password!", Toast.LENGTH_LONG).show();
                 }
-
                 if(loginSuccessful == -2) {
                     Toast.makeText(CustomerLogin.this, "Invalid Email!", Toast.LENGTH_LONG).show();
-
                 }
                 return;
             }
 
 
             Intent launchCustomerMainActivity = new Intent(CustomerLogin.this, MainActivity.class);
+            launchCustomerMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(launchCustomerMainActivity);
         }
     }

@@ -1,6 +1,7 @@
 package com.example.freshly;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ public class CustomerRegister extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_customer_register);
 
@@ -42,6 +44,7 @@ public class CustomerRegister extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent launchVendorRegisterActivity = new Intent(CustomerRegister.this, VendorRegister.class);
+                launchVendorRegisterActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(launchVendorRegisterActivity);
             }
         });
@@ -51,6 +54,7 @@ public class CustomerRegister extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent launchCustomerLoginActivity = new Intent(CustomerRegister.this, CustomerLogin.class);
+                launchCustomerLoginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(launchCustomerLoginActivity);
             }
         });
@@ -65,6 +69,11 @@ public class CustomerRegister extends AppCompatActivity {
 
         // Name Validation
         String nameText = name.getText().toString();
+        if(nameText.isEmpty())
+        {
+            Toast.makeText(CustomerRegister.this, "Name is Required!", Toast.LENGTH_LONG).show();
+            return null;
+        }
         if(nameText.length() > 30)
         {
             Toast.makeText(CustomerRegister.this, "Name cannot be greater than 30!", Toast.LENGTH_LONG).show();
@@ -79,6 +88,11 @@ public class CustomerRegister extends AppCompatActivity {
         // Email Validation
         String emailText = email.getText().toString();
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        if(emailText.isEmpty())
+        {
+            Toast.makeText(CustomerRegister.this, "Email is Required!", Toast.LENGTH_LONG).show();
+            return null;
+        }
         if(!emailText.matches(emailRegex))
         {
             Toast.makeText(CustomerRegister.this, "Not a Valid Email!", Toast.LENGTH_LONG).show();
@@ -127,7 +141,7 @@ public class CustomerRegister extends AppCompatActivity {
 
             loginButton.setEnabled(false);
             switchButton.setEnabled(false);
-            signUpText.setOnClickListener(null);
+            signUpText.setEnabled(false);
         }
 
         @Override
@@ -146,46 +160,27 @@ public class CustomerRegister extends AppCompatActivity {
         protected void onPostExecute(Long l) {
             super.onPostExecute(l);
 
+            Button loginButton = findViewById(R.id.customer_login_button);
+            Button switchButton = findViewById(R.id.switch_to_vendor_login);
+            TextView signUpText = findViewById(R.id.signup_text);
+
+            loginButton.setEnabled(true);
+            switchButton.setEnabled(true);
+            signUpText.setEnabled(true);
+
             if(l.intValue() == -1)
             {
                 Toast.makeText(CustomerRegister.this, "Customer Registration Failed!", Toast.LENGTH_LONG).show();
-                Button loginButton = findViewById(R.id.customer_login_button);
-                Button switchButton = findViewById(R.id.switch_to_vendor_login);
-                TextView signUpText = findViewById(R.id.signup_text);
-
-                loginButton.setEnabled(true);
-                switchButton.setEnabled(true);
-                signUpText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent launchCustomerLoginActivity = new Intent(CustomerRegister.this, CustomerLogin.class);
-                        startActivity(launchCustomerLoginActivity);
-                    }
-                });
                 return;
             }
-
             if (l.intValue() == -2) {
                 Toast.makeText(CustomerRegister.this, "Account with this Email already exists!", Toast.LENGTH_LONG).show();
-                Button loginButton = findViewById(R.id.customer_login_button);
-                Button switchButton = findViewById(R.id.switch_to_vendor_login);
-                TextView signUpText = findViewById(R.id.signup_text);
-
-                loginButton.setEnabled(true);
-                switchButton.setEnabled(true);
-                signUpText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent launchCustomerLoginActivity = new Intent(CustomerRegister.this, CustomerLogin.class);
-                        startActivity(launchCustomerLoginActivity);
-                    }
-                });
                 return;
             }
 
-
             Intent launchCustomerLoginActivity = new Intent(CustomerRegister.this, CustomerLogin.class);
-            launchCustomerLoginActivity.putExtra(IntentKeys.LoginToast, "Customer Registered Successfully!");
+            launchCustomerLoginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchCustomerLoginActivity.putExtra(IntentKeys.CUSTOMER_LOGIN_TOAST, "Customer Registered Successfully!");
             startActivity(launchCustomerLoginActivity);
         }
     }

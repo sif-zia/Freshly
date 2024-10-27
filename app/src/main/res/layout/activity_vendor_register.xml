@@ -38,7 +38,7 @@
         android:padding="12dp" />
 
     <EditText
-        android:id="@+id/customer_password_input"
+        android:id="@+id/vendor_password_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

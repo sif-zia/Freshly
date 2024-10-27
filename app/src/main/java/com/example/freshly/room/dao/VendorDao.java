@@ -21,4 +21,10 @@ public interface VendorDao {
 
     @Query("SELECT * FROM Vendors WHERE id = :id")
     Vendor getVendorById(long id);
+
+    @Query("SELECT EXISTS (SELECT * FROM Vendors WHERE username = :username)")
+    boolean doesUsernameExists(String username);
+
+    @Query("SELECT EXISTS (SELECT * FROM Vendors WHERE username = :username AND password = :password)")
+    boolean loginVendor(String username, String password);
 }
