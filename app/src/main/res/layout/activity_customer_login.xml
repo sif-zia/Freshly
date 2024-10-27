@@ -29,7 +29,7 @@
         android:layout_marginBottom="32dp" />
 
     <EditText
-        android:id="@+id/email_input"
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
@@ -39,7 +39,7 @@
         android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/customer_password_input"
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
@@ -56,9 +56,9 @@
         <Button
             android:id="@+id/switch_to_vendor_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Login as Vendor"
-            android:backgroundTint="@color/background"
+            android:backgroundTint="@color/white"
             android:textColor="@color/primary"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
@@ -67,7 +67,7 @@
         <Button
             android:id="@+id/customer_login_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Login"
             android:backgroundTint="@color/primary"
             android:textColor="@color/white"

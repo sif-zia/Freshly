@@ -21,4 +21,10 @@ public interface CustomerDao {
 
     @Query("SELECT * FROM Customers WHERE id = :id")
     Customer getCustomerById(long id);
+
+    @Query("SELECT EXISTS (SELECT * FROM Customers WHERE email = :email AND password = :password)")
+    boolean loginCustomer(String email, String password);
+
+    @Query("SELECT EXISTS (SELECT * FROM Customers WHERE email = :email)")
+    boolean isEmailExists(String email);
 }
