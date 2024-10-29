@@ -12,13 +12,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.freshly.intentkeys.IntentKeys;
+import com.example.freshly.keys.IntentKeys;
 import com.example.freshly.room.database.FreshlyDB;
-import com.example.freshly.room.entity.Customer;
 import com.example.freshly.room.entity.Vendor;
 
 public class VendorLogin extends AppCompatActivity {

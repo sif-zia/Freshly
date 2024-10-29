@@ -7,7 +7,9 @@ import com.example.freshly.room.entity.Category;
 import com.example.freshly.room.entity.Product;
 import com.example.freshly.room.entity.Vendor;
 
-public class ProductWithVendorAndCategory {
+import java.io.Serializable;
+
+public class ProductWithVendorAndCategory implements Serializable {
     @Embedded
     public Product product;
 

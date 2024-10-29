@@ -49,4 +49,7 @@ dependencies {
     // TabLayout Dependencies
     implementation(libs.material.v180)
     implementation(libs.viewpager2)
+
+    // JSON Dependencies
+    implementation(libs.gson)
 }

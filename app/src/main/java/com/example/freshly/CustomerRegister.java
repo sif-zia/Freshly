@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.freshly.intentkeys.IntentKeys;
+import com.example.freshly.keys.IntentKeys;
 import com.example.freshly.room.database.FreshlyDB;
 import com.example.freshly.room.entity.Customer;
 

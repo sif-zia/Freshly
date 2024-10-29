@@ -1,5 +1,7 @@
 package com.example.freshly;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -12,11 +14,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.freshly.keys.SharedPreferencesKeys;
 import com.example.freshly.listview.ListViewAdapter;
 import com.example.freshly.productrecyclerview.ProductAdapter;
 import com.example.freshly.room.database.FreshlyDB;
 import com.example.freshly.room.relation.ProductWithVendorAndCategory;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
@@ -27,29 +33,25 @@ public class CartActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
 
-        new GetAllPrducts().execute();
+        List<ProductWithVendorAndCategory> productList = getProducts();
+        ListView listView = findViewById(R.id.cart_list_view);
+        ListViewAdapter listViewAdapter = new ListViewAdapter(productList, this);
+        listView.setAdapter(listViewAdapter);
     }
 
-    class GetAllPrducts extends AsyncTask<Void, Void, List<ProductWithVendorAndCategory>> {
+    protected List<ProductWithVendorAndCategory> JSONToProduct(String productJSON) {
+        Type type = new TypeToken<List<ProductWithVendorAndCategory>>(){}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(productJSON, type);
+    }
 
-        @Override
-        protected List<ProductWithVendorAndCategory> doInBackground(Void... voids) {
-            return FreshlyDB
-                    .getInstance(CartActivity.this)
-                    .productDao()
-                    .getAllProductsWithDetails();
-        }
+    protected List<ProductWithVendorAndCategory> getProducts() {
+        Context context = CartActivity.this;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferencesKeys.PREFERENCES_NAME, Context.MODE_PRIVATE);
 
-        @Override
-        protected void onPostExecute(List<ProductWithVendorAndCategory> productWithVendorAndCategories) {
-            super.onPostExecute(productWithVendorAndCategories);
+        String productJSON = sharedPreferences.getString(SharedPreferencesKeys.CART, "[]");
+        List<ProductWithVendorAndCategory> productList = JSONToProduct(productJSON);
 
-            if(productWithVendorAndCategories == null || productWithVendorAndCategories.isEmpty())
-                return;
-
-            ListView listView = findViewById(R.id.cart_list_view);
-            ListViewAdapter listViewAdapter = new ListViewAdapter(productWithVendorAndCategories, CartActivity.this);
-            listView.setAdapter(listViewAdapter);
-        }
+        return productList;
     }
 }

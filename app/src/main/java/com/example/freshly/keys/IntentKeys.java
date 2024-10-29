@@ -1,4 +1,4 @@
-package com.example.freshly.intentkeys;
+package com.example.freshly.keys;
 
 public class IntentKeys {
     public static final String CUSTOMER_LOGIN_TOAST = "CustomerLoginToast";
