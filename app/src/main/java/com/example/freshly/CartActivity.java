@@ -50,8 +50,7 @@ public class CartActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SharedPreferencesKeys.PREFERENCES_NAME, Context.MODE_PRIVATE);
 
         String productJSON = sharedPreferences.getString(SharedPreferencesKeys.CART, "[]");
-        List<ProductWithVendorAndCategory> productList = JSONToProduct(productJSON);
 
-        return productList;
+        return JSONToProduct(productJSON);
     }
 }
