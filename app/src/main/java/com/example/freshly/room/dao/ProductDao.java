@@ -36,6 +36,19 @@ public interface ProductDao {
             " WHERE P.id = :id")
     ProductWithVendorAndCategory getProductDetailsById(long id);
 
+    @Query("SELECT *"+
+            " FROM Products AS P"+
+            " JOIN Categories AS C ON P.categoryID = C.id"+
+            " JOIN Vendors AS V ON P.vendorID = V.id")
+    List<ProductWithVendorAndCategory> getAllProductsWithDetails();
+
+    @Query("SELECT *"+
+            " FROM Products AS P"+
+            " JOIN Categories AS C ON P.categoryID = C.id"+
+            " JOIN Vendors AS V ON P.vendorID = V.id"+
+            " WHERE C.name LIKE :cat")
+    List<ProductWithVendorAndCategory> getAllProductsWithDetailsByCat(String cat);
+
     @Query("SELECT * FROM Products WHERE categoryID = :id")
     LiveData<List<Product>> getProductsByCategoryId(long id);
 

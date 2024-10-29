@@ -1,21 +1,26 @@
 package com.example.freshly;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TableLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.freshly.room.database.FreshlyDB;
-import com.example.freshly.room.entity.Category;
-
-import java.util.List;
+import com.example.freshly.fragments.ProductPagerAdapter;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
+
+    protected String category = "";
+    protected ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,63 +28,40 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        new retreiveCategories().execute();
-    }
+        // Setup Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    class insertCategories extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected void onPostExecute(Boolean res) {
-            super.onPostExecute(res);
+        // Setup ViewPager
+        ViewPager2 viewPager = findViewById(R.id.view_pager);
+        ProductPagerAdapter productPagerAdapter = new ProductPagerAdapter(this);
+        viewPager.setAdapter(productPagerAdapter);
 
-            final String TAG = "Freshly.Insert.Res";
+        // Setup TabLayout
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
 
-            if(res)
-                Log.d(TAG, "Insertion Successfully");
-            else
-                Log.d(TAG, "Insertion Failed");
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            FreshlyDB db = FreshlyDB.getInstance(MainActivity.this);
-
-            long res = db.categoryDao().insert(new Category("Fruits"));
-            if(res  == -1)
-                return false;
-
-            res = db.categoryDao().insert(new Category("Vegetables"));
-            if(res == -1)
-                return false;
-
-            res = db.categoryDao().insert(new Category("Dry Fruits"));
-            if(res == -1)
-                return false;
-
-            return true;
-        }
-    }
-
-    class retreiveCategories extends AsyncTask<Void, Void, List<Category>> {
-        @Override
-        protected void onPostExecute(List<Category> categories) {
-            super.onPostExecute(categories);
-
-            final String TAG = "Freshly.Retrieve.Res";
-
-            if(categories.size() == 0)
-                Log.d(TAG, "Retrieve Failed");
-            else{
-                for(Category category: categories) {
-                    Log.d(TAG, category.name);
-                }
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("All");
+                    break;
+                case 1:
+                    tab.setText("Fruits");
+                    break;
+                case 2:
+                    tab.setText("Vegetables");
+                    break;
+                case 3:
+                    tab.setText("Dry Fruits");
+                    break;
             }
-        }
+        }).attach();
 
-        @Override
-        protected List<Category> doInBackground(Void... voids) {
-            FreshlyDB db = FreshlyDB.getInstance(MainActivity.this);
-
-            return db.categoryDao().getAllCategories();
-        }
+        // Cart Button Handler
+        Button cartButton = findViewById(R.id.cart_button);
+        cartButton.setOnClickListener(view -> {
+            Intent launchCartActivity = new Intent(MainActivity.this, CartActivity.class);
+            startActivity(launchCartActivity);
+        });
     }
 }

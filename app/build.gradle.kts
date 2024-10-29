@@ -46,4 +46,7 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
 
+    // TabLayout Dependencies
+    implementation(libs.material.v180)
+    implementation(libs.viewpager2)
 }
