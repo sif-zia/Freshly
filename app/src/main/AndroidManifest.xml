@@ -26,16 +26,15 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="false"/>
+        <activity
+            android:name=".CustomerLogin"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CustomerLogin"
-            android:exported="true" />
     </application>
 
 </manifest>
